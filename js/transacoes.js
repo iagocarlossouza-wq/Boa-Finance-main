@@ -141,9 +141,22 @@ function excluirTransacao(index) {
     if (typeof criarGraficoPizza === "function") criarGraficoPizza();
 }
 
-// Executa as funções essenciais assim que o DOM carregar
-document.addEventListener("DOMContentLoaded", function() {
+// Inicialização segura com monitoramento dinâmico do elemento "tipo"
+function inicializarSistema() {
     atualizarCategorias();
     carregarTransacoes();
     atualizarResumoFinanceiro();
-});
+
+    // Adiciona o listener diretamente via JS caso ele não tenha sido pego no HTML
+    const tipoSelect = document.getElementById("tipo");
+    if (tipoSelect) {
+        tipoSelect.addEventListener("change", atualizarCategorias);
+    }
+}
+
+// Certifica o disparo independente de como a página carrega no ambiente web
+if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", inicializarSistema);
+} else {
+    inicializarSistema();
+}
